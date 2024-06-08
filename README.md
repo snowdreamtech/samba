@@ -5,13 +5,20 @@
 Docker Image packaging for Samba. (amd64, arm32v6, arm32v7, arm64v8, i386, ppc64le,riscv64, s390x)
 
 # Run
-
 ```bash
-docker run snowdreamtech/samba:latest
+docker run -d --restart always --network host -e SAMBA_ROOT_PASSWORD=123456 --name samba snowdreamtech/samba:latest
 ```
 
 ```bash
-docker run -e TZ=Asia/Shanghai snowdreamtech/samba:latest
+docker run -d --restart always --network host -e TZ=Asia/Shanghai -e SAMBA_ROOT_PASSWORD=123456 --name samba snowdreamtech/samba:latest
+```
+
+```bash
+docker run -d --restart always -e SAMBA_ROOT_PASSWORD=123456 -p 137:137/udp -p 138:138/udp -p 139:139/tcp -p 445:445/tcp --name samba snowdreamtech/samba:latest
+```
+
+```bash
+docker run -d --restart always -e TZ=Asia/Shanghai -e SAMBA_ROOT_PASSWORD=123456 -p 137:137/udp -p 138:138/udp -p 139:139/tcp -p 445:445/tcp --name samba snowdreamtech/samba:latest
 ```
 
 # Development
