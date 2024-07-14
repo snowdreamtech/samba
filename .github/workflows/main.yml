@@ -46,12 +46,10 @@ jobs:
           push: true
           tags: |
             snowdreamtech/samba:latest
-            snowdreamtech/samba:4.19.6-r0
             snowdreamtech/samba:4.19.6
             snowdreamtech/samba:4.19
             snowdreamtech/samba:4.19
             ghcr.io/snowdreamtech/samba:latest
-            ghcr.io/snowdreamtech/samba:4.19.6-r0
             ghcr.io/snowdreamtech/samba:4.19.6
             ghcr.io/snowdreamtech/samba:4.19
             ghcr.io/snowdreamtech/samba:4.19
