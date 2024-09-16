@@ -13,7 +13,10 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
       org.opencontainers.image.url="https://github.com/snowdreamtech/alpine"
 
 # keep the docker container running
-ENV KEEPALIVE=0
+ENV KEEPALIVE=0 \
+    # Ensure the container exec commands handle range of utf8 characters based of
+    # default locales in base image (https://github.com/docker-library/docs/tree/master/debian#locales)
+    LANG=C.UTF-8 
 
 RUN echo "@main https://dl-cdn.alpinelinux.org/alpine/edge/main" | tee -a /etc/apk/repositories \
     && echo "@community https://dl-cdn.alpinelinux.org/alpine/edge/community" | tee -a /etc/apk/repositories \
