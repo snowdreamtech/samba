@@ -74,4 +74,6 @@ jobs:
               ghcr.io/snowdreamtech/debian:latest
               ghcr.io/snowdreamtech/debian:12.7
               ghcr.io/snowdreamtech/debian:12
+            cache-from: type=gha
+            cache-to: type=gha,mode=max                    
              

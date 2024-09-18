@@ -76,4 +76,6 @@ jobs:
               ghcr.io/snowdreamtech/alpine:3.20.3
               ghcr.io/snowdreamtech/alpine:3.20
               ghcr.io/snowdreamtech/alpine:3
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
              
