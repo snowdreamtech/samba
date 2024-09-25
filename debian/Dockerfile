@@ -1,4 +1,4 @@
-FROM debian:12.7-slim
+FROM snowdreamtech/debian:12.7.0
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
@@ -12,27 +12,13 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.version="12.7" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/base"
 
-ENV DEBIAN_FRONTEND=noninteractive \
-    # keep the docker container running
-    KEEPALIVE=0 \
-    # Ensure the container exec commands handle range of utf8 characters based of
-    # default locales in base image (https://github.com/docker-library/docs/tree/master/debian#locales)
-    LANG=C.UTF-8 
+# keep the docker container running
+ENV KEEPALIVE=1
 
 RUN set -eux \
     && apt-get -qqy update  \
     && apt-get -qqy install --no-install-recommends \ 
-    procps \
-    sudo \
-    vim \ 
-    unzip \
-    tzdata \
-    openssl \
-    wget \
-    curl \
-    apt-transport-https \
-    ca-certificates \                                                                                                                                                                                                      
-    && update-ca-certificates\
+    vim \
     && apt-get -qqy --purge autoremove \
     && apt-get -qqy clean \
     && rm -rf /var/lib/apt/lists/* \

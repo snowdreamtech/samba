@@ -1,4 +1,4 @@
-FROM alpine:3.20.3
+FROM snowdreamtech/alpine:3.20.3
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
@@ -13,21 +13,10 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/base"
 
 # keep the docker container running
-ENV KEEPALIVE=0 \
-    # Ensure the container exec commands handle range of utf8 characters based of
-    # default locales in base image (https://github.com/docker-library/docs/tree/master/debian#locales)
-    LANG=C.UTF-8 
+ENV KEEPALIVE=1
 
-RUN echo "@main https://dl-cdn.alpinelinux.org/alpine/edge/main" | tee -a /etc/apk/repositories \
-    && echo "@community https://dl-cdn.alpinelinux.org/alpine/edge/community" | tee -a /etc/apk/repositories \
-    && echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" | tee -a /etc/apk/repositories \
-    && apk add --no-cache musl-locales \
-    musl-locales-lang \
-    tzdata \
-    openssl \
-    wget \
-    ca-certificates \                                                                                                                                                                                                      
-    && update-ca-certificates
+RUN apk add --no-cache \
+    vim
 
 COPY docker-entrypoint.sh /usr/local/bin/
 
