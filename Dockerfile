@@ -4,7 +4,7 @@ LABEL maintainer="snowdream <sn0wdr1am@qq.com>"
 
 ENV SAMBA_ROOT_PASSWORD=
 
-RUN apk add --no-cache samba=4.19.6-r0
+RUN apk add --no-cache samba=4.19.9-r0
 
 # exposes samba's default ports 
 # 
