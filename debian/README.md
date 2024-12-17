@@ -36,8 +36,6 @@ docker run -d \
 ### Simple
 
 ```bash
-version: "3"
-
 services:
   debian:
     image: snowdreamtech/debian:latest
@@ -50,8 +48,6 @@ services:
 ### Advance
 
 ```bash
-version: "3"
-
 services:
   debian:
     image: snowdreamtech/debian:latest
