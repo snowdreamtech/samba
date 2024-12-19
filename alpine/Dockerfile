@@ -15,8 +15,26 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
 # keep the docker container running
 ENV KEEPALIVE=1
 
+ARG GID=1000 \
+    UID=1000  \
+    USER=base \
+    WORKDIR=/home/base
+
+# Create a user with UID and GID
+RUN if [ "${USER}" != "root" ]; then \
+    addgroup -g ${GID} ${USER}; \
+    adduser -h /home/${USER} -u ${UID} -g ${USER} -G ${USER} -s /bin/sh -D ${USER}; \
+    # sed -i "/%sudo/c ${USER} ALL=(ALL:ALL) NOPASSWD:ALL" /etc/sudoers; \
+    fi
+
 RUN apk add --no-cache \
     vim
+
+# Switch to the user
+USER ${USER}
+
+# Set the workdir
+WORKDIR ${WORKDIR}
 
 COPY docker-entrypoint.sh /usr/local/bin/
 
