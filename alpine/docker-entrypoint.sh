@@ -9,10 +9,11 @@ if [ -z "${SAMBA_PASSWORD}" ]; then {
 fi
 
 # change the samba password for user samba
-echo -e "${SAMBA_PASSWORD}\n${SAMBA_PASSWORD}" | smbpasswd >/dev/null 2>&1
+echo -e "${SAMBA_PASSWORD}\n${SAMBA_PASSWORD}" | smbpasswd
 
 # start samba
 /usr/sbin/smbd -D -s /etc/samba/smb.conf
+/usr/sbin/nmbd -D -s /etc/samba/smb.conf
 
 # exec commands
 if [ -n "$*" ]; then
