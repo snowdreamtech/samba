@@ -13,6 +13,7 @@ echo -e "${SAMBA_PASSWORD}\n${SAMBA_PASSWORD}" | smbpasswd >/dev/null 2>&1
 
 # start samba
 /usr/sbin/smbd -D -s /etc/samba/smb.conf
+/usr/sbin/nmbd -D -s /etc/samba/smb.conf
 
 # exec commands
 if [ -n "$*" ]; then
