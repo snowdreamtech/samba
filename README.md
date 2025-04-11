@@ -1,6 +1,6 @@
 # Samba
 
-[![Samba](http://dockeri.co/image/snowdreamtech/samba)](https://hub.docker.com/r/snowdreamtech/samba)
+[![dockeri.co](https://dockerico.blankenship.io/image/snowdreamtech/samba)](https://hub.docker.com/r/snowdreamtech/samba)
 
 Docker Image packaging for Samba. (amd64, arm32v5,  arm32v6, arm32v7, arm64v8, i386, mips64le, ppc64le,riscv64, s390x)
 
