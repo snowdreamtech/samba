@@ -1,4 +1,4 @@
-FROM snowdreamtech/alpine:3.21.0
+FROM snowdreamtech/alpine:3.21.3
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
@@ -9,7 +9,7 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.source="https://github.com/snowdreamtech/samba" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="3.21.0" \
+    org.opencontainers.image.version="4.20.6" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/samba"
 
 # keep the docker container running
