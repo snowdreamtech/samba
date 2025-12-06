@@ -2,15 +2,15 @@ FROM snowdreamtech/debian:13.1.0
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
-    org.opencontainers.image.title="Base Image Based On Debian" \
-    org.opencontainers.image.description="Docker Images for Base on Debian. (i386,amd64,arm32v5,arm32v7,arm64,mips64le,ppc64le,s390x)" \
-    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/base" \
-    org.opencontainers.image.base.name="snowdreamtech/base:debian" \
+    org.opencontainers.image.title="Samba Image Based On Debian" \
+    org.opencontainers.image.description="Docker Images for Samba on Debian. (i386,amd64,arm32v5,arm32v7,arm64,mips64le,ppc64le,s390x)" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/samba" \
+    org.opencontainers.image.base.name="snowdreamtech/samba:debian" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/snowdreamtech/base" \
+    org.opencontainers.image.source="https://github.com/snowdreamtech/samba" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="13.1.0" \
-    org.opencontainers.image.url="https://github.com/snowdreamtech/base"
+    org.opencontainers.image.version="4.17.12" \
+    org.opencontainers.image.url="https://github.com/snowdreamtech/samba"
 
 # Switch to the user
 USER root
@@ -50,6 +50,9 @@ ENV DEBIAN_FRONTEND=${DEBIAN_FRONTEND} \
     USER=${USER} \
     WORKDIR=${WORKDIR} 
 
+ENV SAMBA_VERSION=2:4.17.12+dfsg-0+deb12u1 \
+    SAMBA_PASSWORD=
+
 # Create a user with PUID and PGID
 RUN if [ "${USER}" != "root" ] && [ ! -d "/home/${USER}" ] && [ "${PUID}" -ne 0 ] && [ "${PGID}" -ne 0 ]; then \
     addgroup --gid ${PGID} ${USER}; \
@@ -60,7 +63,7 @@ RUN if [ "${USER}" != "root" ] && [ ! -d "/home/${USER}" ] && [ "${PUID}" -ne 0 
 RUN set -eux \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy update  \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy install --no-install-recommends \ 
-    vim \
+    samba=${SAMBA_VERSION} \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy --purge autoremove \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy clean \
     && rm -rf /var/lib/apt/lists/* \
@@ -71,6 +74,29 @@ RUN set -eux \
 # RUN if [ "${USER}" != "root" ] && [ "${CAP_NET_BIND_SERVICE}" -eq 1 ]; then \
 #     # setcap 'cap_net_bind_service=+ep' `which nginx`; \
 #     fi
+
+COPY smb.conf /etc/samba/
+
+# exposes samba's default ports 
+# 
+# https://wiki.samba.org/index.php/Samba_AD_DC_Port_Usage
+# 
+# Service	Port	Protocol
+# DNS *	53	tcp/udp
+# Kerberos	88	tcp/udp
+# ntp **	123	udp
+# End Point Mapper (DCE/RPC Locator Service)	135	tcp
+# NetBIOS Name Service	137	udp
+# NetBIOS Datagram	138	udp
+# NetBIOS Session	139	tcp
+# LDAP	389	tcp/udp
+# SMB over TCP	445	tcp
+# Kerberos kpasswd	464	tcp/udp
+# LDAPS ***	636	tcp
+# Global Catalog	3268	tcp
+# Global Catalog SSL ***	3269	tcp
+# Dynamic RPC Ports ****	49152-65535	tcp
+EXPOSE 135/tcp 137/udp 138/udp 139/tcp 389/udp 389/tcp 445/TCP
 
 COPY entrypoint.d /usr/local/bin/entrypoint.d
 

@@ -2,15 +2,15 @@ FROM snowdreamtech/alpine:3.22.2
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
-    org.opencontainers.image.title="Base Image Based On Alpine" \
-    org.opencontainers.image.description="Docker Images for Base on Alpine. (i386, amd64, arm32v6, arm32v7, arm64, ppc64le,riscv64, s390x)" \
-    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/base" \
-    org.opencontainers.image.base.name="snowdreamtech/base:alpine" \
+    org.opencontainers.image.title="Samba Image Based On Alpine" \
+    org.opencontainers.image.description="Docker Images for Samba on Alpine. (i386, amd64, arm32v6, arm32v7, arm64, ppc64le,riscv64, s390x)" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/samba" \
+    org.opencontainers.image.base.name="snowdreamtech/samba:alpine" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/snowdreamtech/base" \
+    org.opencontainers.image.source="https://github.com/snowdreamtech/samba" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="3.22.2" \
-    org.opencontainers.image.url="https://github.com/snowdreamtech/base"
+    org.opencontainers.image.version="4.20.6" \
+    org.opencontainers.image.url="https://github.com/snowdreamtech/samba"
     
 # Switch to the user
 USER root
@@ -48,6 +48,9 @@ ENV KEEPALIVE=${KEEPALIVE} \
     USER=${USER} \
     WORKDIR=${WORKDIR} 
 
+ENV SAMBA_VERSION=4.20.6-r1 \
+    SAMBA_PASSWORD=
+
 # Create a user with PUID and PGID
 RUN if [ "${USER}" != "root" ] && [ ! -d "/home/${USER}" ] && [ "${PUID}" -ne 0 ] && [ "${PGID}" -ne 0 ]; then \
     addgroup -g ${PGID} ${USER}; \
@@ -57,12 +60,34 @@ RUN if [ "${USER}" != "root" ] && [ ! -d "/home/${USER}" ] && [ "${PUID}" -ne 0 
 
 RUN apk update \
     && apk add --no-cache \
-    vim
+    samba=${SAMBA_VERSION}
 
 # Enable CAP_NET_BIND_SERVICE
 # RUN if [ "${USER}" != "root" ] && [ "${CAP_NET_BIND_SERVICE}" -eq 1 ]; then \
     # setcap 'cap_net_bind_service=+ep' `which nginx`; \
     # fi
+COPY smb.conf /etc/samba/
+
+# exposes samba's default ports 
+# 
+# https://wiki.samba.org/index.php/Samba_AD_DC_Port_Usage
+# 
+# Service	Port	Protocol
+# DNS *	53	tcp/udp
+# Kerberos	88	tcp/udp
+# ntp **	123	udp
+# End Point Mapper (DCE/RPC Locator Service)	135	tcp
+# NetBIOS Name Service	137	udp
+# NetBIOS Datagram	138	udp
+# NetBIOS Session	139	tcp
+# LDAP	389	tcp/udp
+# SMB over TCP	445	tcp
+# Kerberos kpasswd	464	tcp/udp
+# LDAPS ***	636	tcp
+# Global Catalog	3268	tcp
+# Global Catalog SSL ***	3269	tcp
+# Dynamic RPC Ports ****	49152-65535	tcp
+EXPOSE 135/tcp 137/udp 138/udp 139/tcp 389/udp 389/tcp 445/TCP
 
 COPY entrypoint.d /usr/local/bin/entrypoint.d
 
