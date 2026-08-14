@@ -1,9 +1,9 @@
 # Base
 
-![Docker Image Version](https://img.shields.io/docker/v/snowdreamtech/base)
-![Docker Image Size](https://img.shields.io/docker/image-size/snowdreamtech/base/latest)
-![Docker Pulls](https://img.shields.io/docker/pulls/snowdreamtech/base)
-![Docker Stars](https://img.shields.io/docker/stars/snowdreamtech/base)
+![Docker Image Version](https://img.shields.io/docker/v/snowdreamtech/samba)
+![Docker Image Size](https://img.shields.io/docker/image-size/snowdreamtech/samba/latest)
+![Docker Pulls](https://img.shields.io/docker/pulls/snowdreamtech/samba)
+![Docker Stars](https://img.shields.io/docker/stars/snowdreamtech/samba)
 
 Docker 基础模板，提供标准化的容器基础，具有灵活的入口点系统、多架构支持以及跨 Alpine、Debian 和 Rocky Linux 发行版的一致配置模式。
 
@@ -22,8 +22,8 @@ Docker 基础模板作为构建容器化应用程序的基础起点。它提供�
 
 ```bash
 # 拉取并运行默认的 Debian 变体
-docker pull snowdreamtech/base:debian
-docker run -d --name=base -e TZ=Asia/Shanghai snowdreamtech/base:debian
+docker pull snowdreamtech/samba:debian
+docker run -d --name=base -e TZ=Asia/Shanghai snowdreamtech/samba:debian
 
 # 或使用 docker-compose
 docker-compose up -d
@@ -40,7 +40,7 @@ docker run -d \
   --name=base \
   -e TZ=Asia/Shanghai \
   --restart unless-stopped \
-  snowdreamtech/base:debian
+  snowdreamtech/samba:debian
 ```
 
 **支持的架构**：amd64、arm32v7、arm64、ppc64le、riscv64、s390x
@@ -56,7 +56,7 @@ docker run -d \
   --name=base \
   -e TZ=Asia/Shanghai \
   --restart unless-stopped \
-  snowdreamtech/base:alpine
+  snowdreamtech/samba:alpine
 ```
 
 **支持的架构**：i386、amd64、arm32v6、arm32v7、arm64、ppc64le、riscv64、s390x
@@ -72,7 +72,7 @@ docker run -d \
   --name=base \
   -e TZ=Asia/Shanghai \
   --restart unless-stopped \
-  snowdreamtech/base:rocky
+  snowdreamtech/samba:rocky
 ```
 
 **支持的架构**：amd64、arm64、ppc64le、s390x
@@ -85,13 +85,13 @@ docker run -d \
 
 ```bash
 # 构建 Debian 变体
-docker build -t snowdreamtech/base:debian ./docker/debian/
+docker build -t snowdreamtech/samba:debian ./docker/debian/
 
 # 构建 Alpine 变体
-docker build -t snowdreamtech/base:alpine ./docker/alpine/
+docker build -t snowdreamtech/samba:alpine ./docker/alpine/
 
 # 构建 Rocky 变体
-docker build -t snowdreamtech/base:rocky ./docker/rocky/
+docker build -t snowdreamtech/samba:rocky ./docker/rocky/
 ```
 
 ### 多架构构建
@@ -105,21 +105,21 @@ docker buildx create --use --name build --node build --driver-opt network=host
 # 为多个架构构建 Debian
 docker buildx build \
   --platform=linux/386,linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64,linux/ppc64le,linux/riscv64,linux/s390x \
-  -t snowdreamtech/base:debian \
+  -t snowdreamtech/samba:debian \
   ./docker/debian/ \
   --push
 
 # 为多个架构构建 Alpine
 docker buildx build \
   --platform=linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/riscv64,linux/s390x \
-  -t snowdreamtech/base:alpine \
+  -t snowdreamtech/samba:alpine \
   ./docker/alpine/ \
   --push
 
 # 为多个架构构建 Rocky
 docker buildx build \
   --platform=linux/amd64,linux/arm64,linux/ppc64le,linux/s390x \
-  -t snowdreamtech/base:rocky \
+  -t snowdreamtech/samba:rocky \
   ./docker/rocky/ \
   --push
 ```
@@ -156,7 +156,7 @@ docker build \
   --build-arg PUID=1000 \
   --build-arg PGID=1000 \
   --build-arg USER=appuser \
-  -t snowdreamtech/base:debian-custom \
+  -t snowdreamtech/samba:debian-custom \
   ./docker/debian/
 ```
 
@@ -168,7 +168,7 @@ docker run -d \
   -e PUID=1000 \
   -e PGID=1000 \
   -e USER=appuser \
-  snowdreamtech/base:debian
+  snowdreamtech/samba:debian
 ```
 
 **注意**：仅当 `PUID≠0`、`PGID≠0` 且 `USER≠root` 时才会创建用户。
@@ -180,7 +180,7 @@ docker run -d \
 ```yaml
 services:
   base:
-    image: snowdreamtech/base:debian
+    image: snowdreamtech/samba:debian
     container_name: base
     environment:
       - TZ=Asia/Shanghai
@@ -192,7 +192,7 @@ services:
 ```yaml
 services:
   base:
-    image: snowdreamtech/base:debian
+    image: snowdreamtech/samba:debian
     container_name: base
     environment:
       - TZ=Asia/Shanghai
@@ -209,9 +209,9 @@ services:
 
 示例：
 
-- `snowdreamtech/base:<version>-debian`
-- `snowdreamtech/base:<version>-alpine`
-- `snowdreamtech/base:<version>-rocky`
+- `snowdreamtech/samba:<version>-debian`
+- `snowdreamtech/samba:<version>-alpine`
+- `snowdreamtech/samba:<version>-rocky`
 
 此格式允许：
 
@@ -247,7 +247,7 @@ Docker 在拉取镜像时会自动为您的平台选择适当的架构。
 在派生的 Dockerfile 中创建自定义初始化脚本：
 
 ```dockerfile
-FROM snowdreamtech/base:debian
+FROM snowdreamtech/samba:debian
 
 # 添加您的自定义初始化脚本
 COPY my-init.sh /usr/local/bin/entrypoint.d/20-my-init.sh
@@ -263,7 +263,7 @@ CMD ["/app/start.sh"]
 启用调试输出以排查入口点执行问题：
 
 ```bash
-docker run -e DEBUG=true snowdreamtech/base:debian
+docker run -e DEBUG=true snowdreamtech/samba:debian
 ```
 
 输出示例：

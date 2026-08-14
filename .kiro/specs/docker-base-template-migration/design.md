@@ -942,28 +942,28 @@ Migration is complete when:
 
 ```bash
 # Single architecture build
-docker build -t snowdreamtech/base:alpine ./alpine/
-docker build -t snowdreamtech/base:debian ./debian/
-docker build -t snowdreamtech/base:rocky ./rocky/
+docker build -t snowdreamtech/samba:alpine ./alpine/
+docker build -t snowdreamtech/samba:debian ./debian/
+docker build -t snowdreamtech/samba:rocky ./rocky/
 
 # Multi-architecture build
 docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 \
-  -t snowdreamtech/base:alpine-3.23.4 ./alpine/
+  -t snowdreamtech/samba:alpine-3.23.4 ./alpine/
 ```
 
 **Test Commands**:
 
 ```bash
 # Test default configuration
-docker run --rm snowdreamtech/base:alpine id
+docker run --rm snowdreamtech/samba:alpine id
 
 # Test custom user
 docker build --build-arg PUID=1000 --build-arg PGID=1000 --build-arg USER=appuser \
-  -t snowdreamtech/base:alpine-custom ./alpine/
-docker run --rm snowdreamtech/base:alpine-custom id
+  -t snowdreamtech/samba:alpine-custom ./alpine/
+docker run --rm snowdreamtech/samba:alpine-custom id
 
 # Test DEBUG mode
-docker run --rm -e DEBUG=true snowdreamtech/base:alpine
+docker run --rm -e DEBUG=true snowdreamtech/samba:alpine
 ```
 
 **Validation Commands**:
