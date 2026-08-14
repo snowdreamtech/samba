@@ -54,7 +54,7 @@ name: "🐳 Docker Multi-Platform Build"
           - "all"
           - "alpine"
           - "debian"
-          - "rocky"
+          # - "rocky"
         default: "all"
       push_images:
         description: "Push images to registries"
@@ -74,25 +74,25 @@ jobs:
       matrix:
         include:
           - variant: alpine
-            version: "3.24.1"
+            version: "4.24.5"
             context: docker/alpine
             platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/riscv64,linux/s390x
             is_latest: false
             package_manager: apk
 
           - variant: debian
-            version: "13.5.0"
+            version: "4.24.5"
             context: docker/debian
             platforms: linux/amd64,linux/arm/v7,linux/arm64,linux/riscv64,linux/ppc64le,linux/s390x
             is_latest: true
             package_manager: apt-get
 
-          - variant: rocky
-            version: "10.2.0"
-            context: docker/rocky
-            platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x
-            is_latest: false
-            package_manager: dnf
+    #      - variant: rocky
+    #        version: "4.24.5"
+    #        context: docker/rocky
+    #        platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x
+    #        is_latest: false
+    #        package_manager: dnf
     concurrency:
       group: docker-${{ github.workflow }}-${{ github.event_name == 'schedule' && 'nightly' || github.ref }}-${{ matrix.variant }}
       cancel-in-progress: ${{ github.event_name != 'schedule' }}
