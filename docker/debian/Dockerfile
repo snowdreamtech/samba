@@ -17,7 +17,7 @@ ARG BUILDTIME \
     PUID=0 \
     USER=root \
     WORKDIR=/root \
-    SAMBA_VERSION=2:4.24.5+dfsg-1~bpo13+1
+    SAMBA_VERSION=2:4.22.10+dfsg-0+deb13u2
 
 # Standard OCI Metadata (https://github.com/opencontainers/image-spec)
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
