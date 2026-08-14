@@ -5,7 +5,15 @@
 ![Docker Pulls](https://img.shields.io/docker/pulls/snowdreamtech/samba)
 ![Docker Stars](https://img.shields.io/docker/stars/snowdreamtech/samba)
 
-Docker Image packaging for Samba. (amd64, arm32v5,  arm32v6, arm32v7, arm64v8, i386, mips64le, ppc64le,riscv64, s390x)
+Docker Image packaging for Samba. Provides SMB/CIFS file sharing service with multi-architecture support.
+
+## Version Information
+
+| Distribution | Samba Version | Architectures |
+|--------------|---------------|---------------|
+| Alpine 3.24 | 4.23.8-r0 | i386, amd64, arm32v6, arm32v7, arm64, ppc64le, riscv64, s390x |
+| Debian 13 | 4.22.10 | amd64, arm32v7, arm64, ppc64le, riscv64, s390x |
+| Rocky 10.2 | 4.23.5 | amd64, arm64, ppc64le, s390x |
 
 ## Usage
 
