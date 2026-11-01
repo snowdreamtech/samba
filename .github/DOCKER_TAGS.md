@@ -1,22 +1,22 @@
 # Docker Image Tags Reference
 
-This document describes the Docker image tagging strategy for the base template project.
+This document describes the Docker image tagging strategy for the samba project.
 
 ## Tag Naming Convention
 
-All images use the format: `snowdreamtech/base:TAG`
+All images use the format: `snowdreamtech/samba:TAG`
 
 Where `TAG` follows these patterns:
 
-- **Variant-specific tags**: `TAG-variant` (e.g., `nightly-alpine`, `3.23.4-alpine`)
-- **Default tags** (Debian only): `TAG` (e.g., `nightly`, `latest`, `13.4.0`)
+- **Variant-specific tags**: `TAG-variant` (e.g., `nightly-alpine`, `4.23.10-alpine`)
+- **Default tags** (Debian only): `TAG` (e.g., `nightly`, `latest`, `4.22.11`)
 
 ## Supported Registries
 
-All tags are pushed to three registries:
+All tags are pushed to two registries:
 
-- **DockerHub**: `snowdreamtech/base:TAG`
-- **GitHub Container Registry**: `ghcr.io/snowdreamtech/base:TAG`
+- **DockerHub**: `snowdreamtech/samba:TAG`
+- **GitHub Container Registry**: `ghcr.io/snowdreamtech/samba:TAG`
 
 ## Tag Scenarios
 
@@ -31,10 +31,10 @@ git push origin dev
 **Generated tags:**
 
 ```
-snowdreamtech/base:dev-alpine
-snowdreamtech/base:dev-debian
-snowdreamtech/base:dev              # ← Debian (default)
-snowdreamtech/base:dev-rocky
+snowdreamtech/samba:dev-alpine
+snowdreamtech/samba:dev-debian
+snowdreamtech/samba:dev              # ← Debian (default)
+snowdreamtech/samba:dev-rocky
 ```
 
 #### Push to `main` branch
@@ -46,178 +46,161 @@ git push origin main
 **Generated tags:**
 
 ```
-snowdreamtech/base:main-alpine
-snowdreamtech/base:latest-alpine
-snowdreamtech/base:main-debian
-snowdreamtech/base:latest-debian
-snowdreamtech/base:main             # ← Debian (default)
-snowdreamtech/base:latest           # ← Debian (default)
-snowdreamtech/base:main-rocky
-snowdreamtech/base:latest-rocky
+snowdreamtech/samba:main-alpine
+snowdreamtech/samba:latest-alpine
+snowdreamtech/samba:main-debian
+snowdreamtech/samba:latest-debian
+snowdreamtech/samba:main             # ← Debian (default)
+snowdreamtech/samba:latest           # ← Debian (default)
+snowdreamtech/samba:main-rocky
+snowdreamtech/samba:latest-rocky
 ```
 
 ---
 
-### 2. Release Tags (Semantic Versioning)
+### 2. Version Release Tags (Release Please)
 
-#### Alpine Release
+When Release Please creates and tags a release:
+
+#### Alpine Release (e.g., `alpine-v4.23.10`)
 
 ```bash
-git tag alpine-v3.23.4
-git push origin alpine-v3.23.4
+git tag alpine-v4.23.10
+git push origin alpine-v4.23.10
 ```
 
 **Generated tags:**
 
 ```
-snowdreamtech/base:3.23.4-alpine
-snowdreamtech/base:latest-alpine
+snowdreamtech/samba:4.23.10-alpine
+snowdreamtech/samba:4.23-alpine
+snowdreamtech/samba:4-alpine
+snowdreamtech/samba:latest-alpine
 ```
 
-#### Debian Release
+#### Debian Release (e.g., `debian-v4.22.11`) - Default Variant
 
 ```bash
-git tag debian-v13.4.0
-git push origin debian-v13.4.0
+git tag debian-v4.22.11
+git push origin debian-v4.22.11
 ```
 
 **Generated tags:**
 
 ```
-snowdreamtech/base:13.4.0-debian
-snowdreamtech/base:latest-debian
-snowdreamtech/base:13.4.0           # ← Debian (default)
-snowdreamtech/base:latest           # ← Debian (default)
+# Variant-suffixed tags
+snowdreamtech/samba:4.22.11-debian
+snowdreamtech/samba:4.22-debian
+snowdreamtech/samba:4-debian
+snowdreamtech/samba:latest-debian
+
+# Unsuffixed default tags (only for Debian)
+snowdreamtech/samba:4.22.11
+snowdreamtech/samba:4.22
+snowdreamtech/samba:4
+snowdreamtech/samba:latest
 ```
 
-#### Rocky Release
+#### Rocky Release (e.g., `rocky-v4.23.5`)
 
 ```bash
-git tag rocky-v10.1.0
-git push origin rocky-v10.1.0
+git tag rocky-v4.23.5
+git push origin rocky-v4.23.5
 ```
 
 **Generated tags:**
 
 ```
-snowdreamtech/base:10.1.0-rocky
-snowdreamtech/base:latest-rocky
+snowdreamtech/samba:4.23.5-rocky
+snowdreamtech/samba:4.23-rocky
+snowdreamtech/samba:4-rocky
+snowdreamtech/samba:latest-rocky
 ```
 
 ---
 
 ### 3. Nightly Builds (Scheduled)
 
-**Trigger:** Automatically every day at 17:00 UTC
+Runs daily at 17:00 UTC via GitHub Actions schedule:
 
 **Generated tags:**
 
 ```
-# Alpine
-snowdreamtech/base:nightly-alpine
-snowdreamtech/base:20260427-alpine
-
-# Debian (with default tags)
-snowdreamtech/base:nightly-debian
-snowdreamtech/base:20260427-debian
-snowdreamtech/base:nightly          # ← Debian (default)
-snowdreamtech/base:20260427         # ← Debian (default)
-
-# Rocky
-snowdreamtech/base:nightly-rocky
-snowdreamtech/base:20260427-rocky
+snowdreamtech/samba:nightly-alpine
+snowdreamtech/samba:nightly-debian
+snowdreamtech/samba:nightly          # ← Debian (default)
+snowdreamtech/samba:nightly-rocky
 ```
 
 ---
 
-## Tag Priority
+## Quick Reference Table
 
-Tags are generated with the following priority (higher number = higher priority):
-
-| Priority | Type | Example Tags | Trigger |
-|----------|------|--------------|---------|
-| 1000 | Nightly | `nightly`, `nightly-alpine` | Schedule |
-| 900 | Date | `20260427`, `20260427-alpine` | Schedule |
-| 800 | Version | `3.23.4-alpine`, `13.4.0` | Tag push |
-| 600 | Branch | `dev-alpine`, `main-debian` | Branch push |
-| 200 | Latest | `latest`, `latest-alpine` | Main/Tag |
-
----
-
-## Default Variant (Debian)
-
-Debian is designated as the **default variant** (`is_latest: true`), which means:
-
-✅ **Debian gets BOTH suffixed AND unsuffixed tags:**
-
-```
-snowdreamtech/base:nightly-debian   # Variant-specific
-snowdreamtech/base:nightly          # Default (no suffix)
-
-snowdreamtech/base:13.4.0-debian    # Variant-specific
-snowdreamtech/base:13.4.0           # Default (no suffix)
-
-snowdreamtech/base:latest-debian    # Variant-specific
-snowdreamtech/base:latest           # Default (no suffix)
-```
-
-❌ **Alpine and Rocky get ONLY suffixed tags:**
-
-```
-snowdreamtech/base:nightly-alpine   # Variant-specific only
-snowdreamtech/base:nightly-rocky    # Variant-specific only
-```
+| Trigger | Alpine Tags | Debian Tags (Default) | Rocky Tags |
+|---------|-------------|----------------------|------------|
+| `git push origin dev` | `dev-alpine` | `dev-debian`, `dev` | `dev-rocky` |
+| `git push origin main` | `main-alpine`, `latest-alpine` | `main-debian`, `latest-debian`, `main`, `latest` | `main-rocky`, `latest-rocky` |
+| Tag `alpine-v4.23.10` | `4.23.10-alpine`, `4.23-alpine`, `4-alpine`, `latest-alpine` | — | — |
+| Tag `debian-v4.22.11` | — | `4.22.11-debian`, `4.22-debian`, `4-debian`, `latest-debian`, `4.22.11`, `4.22`, `4`, `latest` | — |
+| Tag `rocky-v4.23.5` | — | — | `4.23.5-rocky`, `4.23-rocky`, `4-rocky`, `latest-rocky` |
+| Scheduled (Daily) | `nightly-alpine` | `nightly-debian`, `nightly` | `nightly-rocky` |
 
 ---
 
-## Usage Examples
+## Pull Examples
 
-### Pull the latest Debian image (default)
-
-```bash
-docker pull snowdreamtech/base:latest
-# or
-docker pull snowdreamtech/base:latest-debian
-```
-
-### Pull the latest Alpine image
+### Latest Stable Releases
 
 ```bash
-docker pull snowdreamtech/base:latest-alpine
+# Latest Debian (default)
+docker pull snowdreamtech/samba:latest
+docker pull snowdreamtech/samba:debian
+
+# Latest Alpine
+docker pull snowdreamtech/samba:latest-alpine
+docker pull snowdreamtech/samba:alpine
+
+# Latest Rocky
+docker pull snowdreamtech/samba:latest-rocky
+docker pull snowdreamtech/samba:rocky
 ```
 
-### Pull the latest Rocky image
+### Specific Versions
 
 ```bash
-docker pull snowdreamtech/base:latest-rocky
+# Specific version with variant
+docker pull snowdreamtech/samba:4.23.10-alpine
+docker pull snowdreamtech/samba:4.22.11-debian
+docker pull snowdreamtech/samba:4.23.5-rocky
+
+# Specific version (Debian default, unsuffixed)
+docker pull snowdreamtech/samba:4.22.11
+docker pull snowdreamtech/samba:4.22
+docker pull snowdreamtech/samba:4
 ```
 
-### Pull a specific version
+### Development Builds
 
 ```bash
-# Alpine 3.23.4
-docker pull snowdreamtech/base:3.23.4-alpine
-
-# Debian 13.4.0 (two ways)
-docker pull snowdreamtech/base:13.4.0-debian
-docker pull snowdreamtech/base:13.4.0
-
-# Rocky 10.1.0
-docker pull snowdreamtech/base:10.1.0-rocky
+# Dev branch
+docker pull snowdreamtech/samba:dev
+docker pull snowdreamtech/samba:dev-alpine
+docker pull snowdreamtech/samba:dev-debian
+docker pull snowdreamtech/samba:dev-rocky
 ```
 
-### Pull nightly builds
+### Nightly Builds
 
 ```bash
 # Alpine nightly
-docker pull snowdreamtech/base:nightly-alpine
+docker pull snowdreamtech/samba:nightly-alpine
 
 # Debian nightly (two ways)
-docker pull snowdreamtech/base:nightly-debian
-docker pull snowdreamtech/base:nightly
+docker pull snowdreamtech/samba:nightly-debian
+docker pull snowdreamtech/samba:nightly
 
 # Rocky nightly
-docker pull snowdreamtech/base:nightly-rocky
+docker pull snowdreamtech/samba:nightly-rocky
 ```
 
 ---
@@ -227,9 +210,9 @@ docker pull snowdreamtech/base:nightly-rocky
 ### Development Flow
 
 ```
-1. Push to dev → base:dev-alpine, base:dev-debian, base:dev, base:dev-rocky
-2. Push to main → base:main-alpine, base:latest-alpine, base:main-debian, base:latest-debian, base:main, base:latest, base:main-rocky, base:latest-rocky
-3. Create tag → base:VERSION-variant, base:latest-variant (+ unsuffixed for Debian)
+1. Push to dev → samba:dev-alpine, samba:dev-debian, samba:dev, samba:dev-rocky
+2. Push to main → samba:main-alpine, samba:latest-alpine, samba:main-debian, samba:latest-debian, samba:main, samba:latest, samba:main-rocky, samba:latest-rocky
+3. Create tag → samba:VERSION-variant, samba:latest-variant (+ unsuffixed for Debian)
 ```
 
 ### Release Flow (with Release Please)
@@ -250,15 +233,15 @@ The workflow uses a matrix strategy with three variants:
 matrix:
   include:
     - variant: alpine
-      version: "3.23.4"
+      version: "4.23.10"
       is_latest: false
 
     - variant: debian
-      version: "13.4.0"
+      version: "4.22.11"
       is_latest: true    # ← Default variant
 
     - variant: rocky
-      version: "10.1.0"
+      version: "4.23.5"
       is_latest: false
 ```
 
@@ -272,8 +255,8 @@ The key configuration that enables this tagging strategy:
 
 ```yaml
 images: |
-  name=snowdreamtech/base,enable=true
-  name=ghcr.io/snowdreamtech/base,enable=true
+  name=ghcr.io/snowdreamtech/samba,enable=true
+  name=snowdreamtech/samba,enable=true
 flavor: |
   latest=false
   prefix=
